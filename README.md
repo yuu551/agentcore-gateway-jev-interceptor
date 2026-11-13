@@ -5,6 +5,8 @@ Amazon Bedrock AgentCore Gateway の REQUEST インターセプター（Lambda�
 
 ![クライアントから AgentCore Gateway に送ると、REQUEST インターセプターの Lambda が Jev に判定させ、しきい値以上なら 403 を返す。すべてしきい値未満なら推論ターゲットから Amazon Bedrock に送る](docs/architecture.png)
 
+構成図の元データは `docs/architecture.drawio` です（draw.io で開いて直せます）。
+
 > [!NOTE]
 > 検証用に作ったサンプルです。本番での利用は想定していません。
 > 判定の精度やしきい値は、あくまで検証で試した範囲のものです。使う場面のデータで確かめてから調整してください。
@@ -119,13 +121,6 @@ Lambda のロググループとシークレット（復旧期間なし）も消�
 - 質問は英語で書くのがおすすめです。検証では、質問を日本語に訳すと見逃しが増えました。
 - 使う項目は `levels` で選びます。Lambda の環境変数 `SEMANTIC_FILTER_LEVEL`（デフォルトは `standard`）で切り替えます。
 - 書き換えたら `setup.py` をもう一度実行すると Lambda のコードが更新されます。
-
-## ストリーミングについて
-
-- **リクエストは `"stream": true` でも判定されます。** REQUEST インターセプターはモデルを呼ぶ前にリクエストの本文を見るためです。ただし `invoke.py` はストリーミングなしで試しています。
-- **ブロックしたときは SSE ではなく、ふつうの JSON で 403 を返します。** Anthropic や OpenAI の SDK なら、ストリームが始まる前の HTTP エラーとして受け取れます。SSE を自前で読んでいるクライアントは、JSON のエラーが返る場合も扱えるようにしておく必要があります。
-- **判定するのは入力だけで、モデルの出力は判定しません。** 推論ターゲットのストリーミングは、プロバイダーの SSE を変換せずにそのまま流します（[ドキュメント](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-target-inference-connector.html#gateway-target-inference-connector-streaming)）。出力まで見たい場合は、別の仕組みを考える必要があります。
-- **Gateway はストリーミングの応答の長さや時間に上限を設けていません。** 長い応答を防ぎたいときは、ターゲットにトークン数の上限のポリシーを設定するよう案内されています（[ドキュメント](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-target-inference-connector.html#gateway-target-inference-connector-streaming-limits)）。このサンプルでは設定していません。
 
 ## そのほかの注意点
 
