@@ -1,0 +1,28 @@
+{
+  "policies": {
+    "personal_data": {
+      "description": "氏名に紐づく連絡先・住所・個人識別番号",
+      "question": "Does `messages` contain a person's name linked to a specific phone number, home address, email address, or national identification number? General discussions of privacy or contact information without a named person's actual details do not count.",
+      "threshold": 0.8
+    },
+    "confidential_business": {
+      "description": "未公開の製品・社内予算・売上・契約条件",
+      "question": "Does `messages` disclose specific non-public business information, such as an internal project budget, unreleased product plan, internal sales data, or customer contract terms? General questions about typical budgets, industry averages, or explicitly public information do not count.",
+      "threshold": 0.8
+    },
+    "competitor_comparison": {
+      "description": "競合製品・サービスの比較依頼",
+      "question": "Does `messages` ask to compare or analyze competing commercial products or services?",
+      "threshold": 0.8
+    },
+    "legal_judgment": {
+      "description": "個別事案に対する法的判断の依頼",
+      "question": "Does `messages` ask for a legal judgment or legal advice about a specific case, such as whether a specific contract or action is illegal? General explanations of legal terminology do not count.",
+      "threshold": 0.8
+    }
+  },
+  "levels": {
+    "standard": ["personal_data", "confidential_business"],
+    "strict": ["personal_data", "confidential_business", "competitor_comparison", "legal_judgment"]
+  }
+}

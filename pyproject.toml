@@ -1,0 +1,9 @@
+[project]
+name = "agentcore-gateway-jev-interceptor"
+version = "0.1.0"
+description = "Amazon Bedrock AgentCore Gateway の REQUEST インターセプターで Jev に判定させるサンプル"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.43.97",
+    "httpx>=0.28.1",
+]
